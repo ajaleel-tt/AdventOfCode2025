@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"math"
 	"os"
 	"strconv"
 	"strings"
@@ -61,4 +62,45 @@ func findPassword() int {
 	}
 
 	return password
+}
+
+func findPasswordPartTwo() int {
+	nums, err := readDirections()
+	if err != nil {
+		panic(err)
+	}
+
+	cur := 50
+	passes := 0
+
+	for i := 0; i < len(nums); i++ {
+		num := nums[i]
+
+		var clicksToReachZero int
+		if num < 0 {
+			if cur == 0 {
+				clicksToReachZero = 100
+			} else {
+				clicksToReachZero = cur
+			}
+		} else {
+			clicksToReachZero = 100 - cur
+		}
+
+		diff := (cur + num) % 100
+		if diff >= 0 {
+			cur = diff
+		} else {
+			cur = 100 + diff
+		}
+		num = int(math.Abs(float64(num)))
+		var roundTrips = (num - clicksToReachZero) / 100
+		passZeroAtLeastOnce := num >= clicksToReachZero
+		if passZeroAtLeastOnce {
+			passes = passes + roundTrips + 1
+		}
+		fmt.Printf("cur: %d, passes: %d\n", cur, passes)
+	}
+
+	return passes
 }

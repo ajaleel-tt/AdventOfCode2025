@@ -3,6 +3,6 @@ package main
 import "fmt"
 
 func main() {
-	password := findPassword()
+	password := findPasswordPartTwo()
 	fmt.Println(password)
 }
